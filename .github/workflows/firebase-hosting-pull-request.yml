@@ -41,4 +41,7 @@ jobs:
       - name: Deploy to Firebase
         run: |
           echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT }} | base64 --decode > $HOME/service-account.json
-          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskPlanApp --token ${{ secrets.FIREBASE_TOKEN }} --service-account $HOME/service-account.json
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskPlanApp --token $FIREBASE_TOKEN --service-account $HOME/service-account.json
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
