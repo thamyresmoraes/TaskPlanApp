@@ -8,10 +8,18 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -e
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -24,10 +32,15 @@ jobs:
       - name: Build Android app
         run: flutter build apk --release
 
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: App Release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TASKPLANAPP }}'
           channelId: live
-          projectId: taskplanapp# Substitua pela variável de ambiente contendo o token do Firebase
-
+          projectId: taskplanapp
