@@ -1,57 +1,56 @@
-// screens/home_page.dart
-
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/screens/cadastro_page.dart';
 import '/screens/login_page.dart';
 
 class HomePage extends StatelessWidget {
-  final Future<Database> database;
+  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
-  const HomePage({super.key, required this.database});
+  const HomePage({
+    Key? key,
+    required this.firebaseAuth,
+    required this.firestore,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TaskPlanApp'),
+        title: Text('Página inicial'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              key: Key('cadastrar_button'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        CadastroPage(database: database),
+                    builder: (context) => CadastroPage(
+                      firebaseAuth: firebaseAuth,
+                      firestore: firestore,
+                    ),
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text('Cadastrar'),
-              ),
+              child: Text('Cadastrar'),
             ),
-            SizedBox(height: 16.0),
             ElevatedButton(
-              key: Key('entrar_button'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        LoginPage(database: database),
+                    builder: (context) => LoginPage(
+                      firebaseAuth: firebaseAuth,
+                      firestore: firestore,
+                    ),
                   ),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text('Entrar'),
-              ),
+              child: Text('Login'),
             ),
           ],
         ),

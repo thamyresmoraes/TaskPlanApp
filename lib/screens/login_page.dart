@@ -1,13 +1,17 @@
-// screens/login_page.dart
-
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/screens/sucesso_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final Future<Database> database;
+  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
-  const LoginPage({required this.database});
+  const LoginPage({
+    Key? key,
+    required this.firebaseAuth,
+    required this.firestore,
+  }) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -16,39 +20,43 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _nomeController = TextEditingController();
   final _senhaController = TextEditingController();
-  bool _isSenhaVisivel = false;
   String _mensagemErro = '';
 
-  Future<void> _efetuarLogin() async {
+  Future<void> _efetuarLogin(BuildContext context) async {
     final nome = _nomeController.text;
     final senha = _senhaController.text;
 
-    if (widget.database == null) {
-      setState(() {
-        _mensagemErro = 'Banco de dados não disponível.';
-      });
-      return;
-    }
-
-    final Database db = await widget.database;
-    final List<Map<String, dynamic>> usuarios = await db.query(
-      'usuarios',
-      where: 'nome = ? AND senha = ?',
-      whereArgs: [nome, senha],
-    );
-
-    if (usuarios.isNotEmpty) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SucessoPage(
-              mensagem: 'Login Efetuado com sucesso!',
-              database: widget.database),
-        ),
+    try {
+      final UserCredential userCredential =
+          await widget.firebaseAuth.signInWithEmailAndPassword(
+        email: nome,
+        password: senha,
       );
-    } else {
+
+      final userId = userCredential.user!.uid;
+
+      final snapshot =
+          await widget.firestore.collection('usuarios').doc(userId).get();
+
+      if (snapshot.exists) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SucessoPage(
+              mensagem: 'Login Efetuado com sucesso!',
+              firebaseAuth: widget.firebaseAuth,
+              firestore: widget.firestore,
+            ),
+          ),
+        );
+      } else {
+        setState(() {
+          _mensagemErro = 'Usuário ou senha incorretos';
+        });
+      }
+    } catch (e) {
       setState(() {
-        _mensagemErro = 'Usuário ou senha incorretos';
+        _mensagemErro = 'Erro ao efetuar o login: $e';
       });
     }
   }
@@ -57,46 +65,34 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text('Login'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              key: Key('nome_textfield'),
               controller: _nomeController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Nome',
               ),
             ),
             TextField(
-              key: Key('senha_textfield'),
               controller: _senhaController,
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Senha',
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isSenhaVisivel ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isSenhaVisivel = !_isSenhaVisivel;
-                    });
-                  },
-                ),
               ),
-              obscureText: !_isSenhaVisivel,
             ),
+            SizedBox(height: 16.0),
             ElevatedButton(
-              key: Key('entrar_button'),
-              onPressed: _efetuarLogin,
-              child: const Text('Entrar'),
+              onPressed: () => _efetuarLogin(context),
+              child: Text('Login'),
             ),
+            SizedBox(height: 8.0),
             Text(
               _mensagemErro,
-              key: Key('mensagem_erro'),
               style: TextStyle(color: Colors.red),
             ),
           ],
