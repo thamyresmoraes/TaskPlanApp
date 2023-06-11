@@ -38,9 +38,7 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Authenticate with Firebase
-        run: firebase login:ci --no-localhost --debug
-
       - name: Deploy to Firebase
-        run: firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskplanapp --token ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-
+        run: |
+          echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT }} | base64 --decode > $HOME/service-account.json
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskPlanApp --token ${{ secrets.FIREBASE_TOKEN }} --service-account $HOME/service-account.json
