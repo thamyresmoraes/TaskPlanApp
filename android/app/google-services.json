@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "499280569264",
+    "firebase_url": "https://taskplanapp-default-rtdb.firebaseio.com",
+    "project_id": "taskplanapp",
+    "storage_bucket": "taskplanapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499280569264:android:74f7486ea56601f3532c75",
+        "android_client_info": {
+          "package_name": "com.example.taskPlanApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "499280569264-5a8q7df6h7tj86tvrtm8ata5imgh2dpb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaLb0JxyM_A9V5c4sntGnY853NRb6bQJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "499280569264-5a8q7df6h7tj86tvrtm8ata5imgh2dpb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "499280569264-n87ptgc4f5cbcj4gjpn0b1k6sb4tjuai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.taskPlanApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

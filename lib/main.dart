@@ -1,31 +1,27 @@
-// main.dart
-
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as Path;
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/screens/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final databasePath = await getDatabasesPath();
-  final database = await openDatabase(
-    Path.join(databasePath, 'app_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        'CREATE TABLE usuarios(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, senha TEXT)',
-      );
-    },
-    version: 1,
-  );
+  await Firebase.initializeApp();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  runApp(MyApp(database: Future.value(database)));
+  runApp(MyApp(firebaseAuth: firebaseAuth, firestore: firestore));
 }
 
 class MyApp extends StatelessWidget {
-  final Future<Database> database;
+  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
-  const MyApp({required this.database});
+  const MyApp({
+    Key? key,
+    required this.firebaseAuth,
+    required this.firestore,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +30,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(database: database),
+      home: HomePage(
+        firebaseAuth: firebaseAuth,
+        firestore: firestore,
+      ),
     );
   }
 }

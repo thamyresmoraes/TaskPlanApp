@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   sqflite: ^2.2.8+4
   path: ^1.8.2
+  firebase_core: 2.13.1
+  firebase_auth: 4.6.2
+  cloud_firestore: 4.8.0
+  recaptcha_enterprise_flutter: 18.2.1
 
 dev_dependencies:
   flutter_test:
