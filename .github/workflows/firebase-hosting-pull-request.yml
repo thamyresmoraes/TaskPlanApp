@@ -42,5 +42,5 @@ jobs:
         run: firebase login:ci --no-localhost --debug
 
       - name: Deploy to Firebase
-        run: firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskplanapp --token ${{ secrets.FIREBASE_TOKEN }}
+        run: firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskplanapp --token ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
 
