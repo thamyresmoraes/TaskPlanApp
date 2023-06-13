@@ -6,7 +6,8 @@ Esse aplicativo foi criando para servir de suporte para a relização de testes.
 
 - Flutter 3.7.12
 - Dart  2.19.6
-## Setup
+
+# Setup
 
 
 1 -  Clone este repositório na sua máquina;
@@ -16,3 +17,9 @@ Esse aplicativo foi criando para servir de suporte para a relização de testes.
 3 - Instale as dependencias executando o comando `flutter pub get`
 
 4 - Com o emulador aberto, execute o comando `flutter run`
+
+
+#install pods ios
+
+cd ios
+run command `pod install`
