@@ -19,7 +19,3 @@ Esse aplicativo foi criando para servir de suporte para a relização de testes.
 4 - Com o emulador aberto, execute o comando `flutter run`
 
 
-#install pods ios
-
-cd ios
-run command `pod install`
