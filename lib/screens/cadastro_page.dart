@@ -18,25 +18,25 @@ class CadastroPage extends StatefulWidget {
 }
 
 class _CadastroPageState extends State<CadastroPage> {
-  final _nomeController = TextEditingController();
+  final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   String _mensagemErro = '';
 
   Future<void> _efetuarCadastro(BuildContext context) async {
-    final nome = _nomeController.text;
+    final email = _emailController.text;
     final senha = _senhaController.text;
 
     try {
       final UserCredential userCredential =
           await widget.firebaseAuth.createUserWithEmailAndPassword(
-        email: nome,
+        email: email,
         password: senha,
       );
 
       final userId = userCredential.user!.uid;
 
       await widget.firestore.collection('usuarios').doc(userId).set({
-        'nome': nome,
+        'email': email,
         'senha': senha,
       });
 
@@ -69,9 +69,9 @@ class _CadastroPageState extends State<CadastroPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _nomeController,
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Nome',
+                labelText: 'Email',
               ),
             ),
             TextField(

@@ -18,18 +18,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _nomeController = TextEditingController();
+  final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   String _mensagemErro = '';
 
   Future<void> _efetuarLogin(BuildContext context) async {
-    final nome = _nomeController.text;
+    final email = _emailController.text;
     final senha = _senhaController.text;
 
     try {
       final UserCredential userCredential =
           await widget.firebaseAuth.signInWithEmailAndPassword(
-        email: nome,
+        email: email,
         password: senha,
       );
 
@@ -73,9 +73,9 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _nomeController,
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Nome',
+                labelText: 'Email',
               ),
             ),
             TextField(
