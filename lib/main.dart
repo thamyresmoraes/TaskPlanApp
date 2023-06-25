@@ -369,6 +369,12 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     });
   }
 
+  void _deleteTask(int index) {
+    setState(() {
+      _tasks.removeAt(index);
+    });
+  }
+
   void _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pop(context);
@@ -438,6 +444,10 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
                   return ListTile(
                     title: Text(taskName),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => _deleteTask(index),
+                    ),
                     onTap: () => _toggleTaskComplete(index),
                   );
                 },
