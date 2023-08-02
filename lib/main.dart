@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -215,7 +216,7 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
   final TextEditingController _listNameController = TextEditingController();
-  final List<String> _taskLists = [];
+  List<String> _taskLists = [];
 
   @override
   void initState() {
@@ -224,62 +225,34 @@ class _TaskListScreenState extends State<TaskListScreen> {
   }
 
   void _loadTaskLists() async {
-    final taskListDocs = await FirebaseFirestore.instance
-        .collection('taskLists')
-        .doc(widget.user.uid)
-        .collection('lists')
-        .get();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _taskLists
-          .addAll(taskListDocs.docs.map((doc) => doc.data()['name'] as String));
+      _taskLists = prefs.getStringList('taskLists') ?? [];
     });
+  }
+
+  void _saveTaskLists() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('taskLists', _taskLists);
   }
 
   void _createTaskList() async {
     final listName = _listNameController.text;
 
     if (listName.isNotEmpty) {
-      // Create a new task list
-      await FirebaseFirestore.instance
-          .collection('taskLists')
-          .doc(widget.user.uid)
-          .collection('lists')
-          .add({'name': listName});
-
-      // Clear the text field
-      _listNameController.clear();
-
-      // Update the task list state
       setState(() {
         _taskLists.add(listName);
+        _listNameController.clear();
+        _saveTaskLists();
       });
     }
   }
 
   void _deleteTaskList(int index) async {
-    final taskListName = _taskLists[index];
-
-    // Delete the task list from Firestore
-    await FirebaseFirestore.instance
-        .collection('taskLists')
-        .doc(widget.user.uid)
-        .collection('lists')
-        .where('name', isEqualTo: taskListName)
-        .get()
-        .then((snapshot) {
-      for (DocumentSnapshot doc in snapshot.docs) {
-        doc.reference.delete();
-      }
-    });
-
-    // Update the task list state
     setState(() {
       _taskLists.removeAt(index);
+      _saveTaskLists();
     });
-
-    // Return to the task list screen
-    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   @override
@@ -348,7 +321,25 @@ class TaskDetailsScreen extends StatefulWidget {
 
 class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   final TextEditingController _taskNameController = TextEditingController();
-  final List<String> _tasks = [];
+  List<String> _tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _tasks = prefs.getStringList(widget.taskListName) ?? [];
+    });
+  }
+
+  void _saveTasks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(widget.taskListName, _tasks);
+  }
 
   void _createTask() {
     final taskName = _taskNameController.text;
@@ -357,6 +348,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       setState(() {
         _tasks.add(taskName);
         _taskNameController.clear();
+        _saveTasks();
       });
     }
   }
@@ -366,12 +358,14 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       _tasks[index] = _tasks[index].startsWith('✅')
           ? _tasks[index].substring(2)
           : '✅ ${_tasks[index]}';
+      _saveTasks();
     });
   }
 
   void _deleteTask(int index) {
     setState(() {
       _tasks.removeAt(index);
+      _saveTasks();
     });
   }
 
@@ -410,8 +404,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         onPressed: () {
                           // Delete the task list
                           widget.onDelete?.call();
-
-                          // Navigate back to the task list screen
                           Navigator.pop(context);
                         },
                       ),
