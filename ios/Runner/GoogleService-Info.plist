@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>499280569264-2frm6k8j9fgj0kc56nacit3cetfhdvdo.apps.googleusercontent.com</string>
+	<string>499280569264-n87ptgc4f5cbcj4gjpn0b1k6sb4tjuai.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.499280569264-2frm6k8j9fgj0kc56nacit3cetfhdvdo</string>
+	<string>com.googleusercontent.apps.499280569264-n87ptgc4f5cbcj4gjpn0b1k6sb4tjuai</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB7DRvT_i_ESAyvqmi1t2LC4zEG1GmTGtw</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.flutter.flutter.app</string>
+	<string>com.example.taskPlanApp</string>
 	<key>PROJECT_ID</key>
 	<string>taskplanapp</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:499280569264:ios:22cf7ef850169f82532c75</string>
+	<string>1:499280569264:ios:5d45ff6df1f2cadc532c75</string>
 	<key>DATABASE_URL</key>
 	<string>https://taskplanapp-default-rtdb.firebaseio.com</string>
 </dict>
