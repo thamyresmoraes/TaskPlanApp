@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +38,7 @@ class LoginPage extends StatelessWidget {
       );
 
       // Login successful, navigate to task list screen
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => TaskListScreen(userCredential.user!)),
@@ -133,7 +132,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       });
 
       // Registration successful, navigate to task list screen
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => TaskListScreen(userCredential.user!)),
@@ -225,15 +224,27 @@ class _TaskListScreenState extends State<TaskListScreen> {
   }
 
   void _loadTaskLists() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _taskLists = prefs.getStringList('taskLists') ?? [];
-    });
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .get();
+    final data = snapshot.data();
+
+    if (data != null) {
+      // Load the user-specific task lists from Firestore
+      setState(() {
+        _taskLists = List<String>.from(data['taskLists'] ?? []);
+      });
+    }
   }
 
   void _saveTaskLists() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('taskLists', _taskLists);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .set({
+      'taskLists': _taskLists,
+    });
   }
 
   void _createTaskList() async {
@@ -286,6 +297,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
                 return ListTile(
                   title: Text(taskListName),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => _deleteTaskList(index),
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -293,7 +308,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         builder: (context) => TaskDetailsScreen(
                           widget.user,
                           taskListName,
-                          onDelete: () => _deleteTaskList(index),
                         ),
                       ),
                     );
@@ -311,9 +325,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
 class TaskDetailsScreen extends StatefulWidget {
   final User user;
   final String taskListName;
-  final VoidCallback? onDelete;
 
-  TaskDetailsScreen(this.user, this.taskListName, {this.onDelete});
+  TaskDetailsScreen(this.user, this.taskListName);
 
   @override
   _TaskDetailsScreenState createState() => _TaskDetailsScreenState();
@@ -330,15 +343,28 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   void _loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _tasks = prefs.getStringList(widget.taskListName) ?? [];
-    });
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .get();
+    final data = snapshot.data();
+
+    if (data != null) {
+      // Load the user-specific tasks from Firestore
+      setState(() {
+        _tasks =
+            List<String>.from(data['taskLists_${widget.taskListName}'] ?? []);
+      });
+    }
   }
 
   void _saveTasks() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(widget.taskListName, _tasks);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .set({
+      'taskLists_${widget.taskListName}': _tasks,
+    }, SetOptions(merge: true));
   }
 
   void _createTask() {
@@ -383,35 +409,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () => _logout(context),
-          ),
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text('Delete Task List'),
-                    content:
-                        Text('Are you sure you want to delete this task list?'),
-                    actions: [
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      TextButton(
-                        child: Text('Delete'),
-                        onPressed: () {
-                          // Delete the task list
-                          widget.onDelete?.call();
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
           ),
         ],
       ),
