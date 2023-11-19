@@ -1,0 +1,45 @@
+name: Build and Deploy to Firebase
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.5' 
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Android app
+        run: flutter build apk --release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: App Release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase
+        run: |
+          echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT }} | base64 --decode > $HOME/service-account.json
+          export FIREBASE_TOKEN="${{ secrets.FIREBASE_TOKEN }}"
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskPlanApp --token $FIREBASE_TOKEN --service-account $HOME/service-account.json
