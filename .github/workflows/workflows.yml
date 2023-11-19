@@ -19,6 +19,15 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Cache Dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.pub-cache
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-
+
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -53,6 +62,19 @@ jobs:
         name: app-release
         path: build/app/outputs/flutter-apk/app-release.apk
 
+    - name: Set Version
+      id: set_version
+      run: echo "::set-output name=version::$(git rev-list --count HEAD)"
+
+    - name: Check Existing Tag
+      run: |
+        if [[ -z "$(git tag -l 'v${{ steps.set_version.outputs.version }}')" ]]; then
+          git tag -a "v${{ steps.set_version.outputs.version }}" -m "Release version v${{ steps.set_version.outputs.version }}"
+          git push origin "v${{ steps.set_version.outputs.version }}"
+        else
+          echo "Tag v${{ steps.set_version.outputs.version }} already exists."
+        fi
+
     - name: Deploy to Release Page
       uses: softprops/action-gh-release@v1
       with:
@@ -62,4 +84,3 @@ jobs:
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
