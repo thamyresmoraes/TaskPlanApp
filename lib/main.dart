@@ -12,13 +12,11 @@ void main() async {
 class TaskPlanApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print(Theme.of(context)); // Adicione esta linha
+
     return MaterialApp(
       title: 'Task Plan App',
-      theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 252, 254, 254),
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: Color.fromARGB(255, 248, 249, 248)),
-      ),
+      theme: ThemeData(),
       home: LoginPage(),
     );
   }
