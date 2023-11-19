@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "eslint": "^8.54.0"
+  },
+  "devDependencies": {
+    "eslint-config-google": "^0.14.0"
+  }
+}
