@@ -1,6 +1,6 @@
 # Task Plan App
 
-Esse aplicativo foi criando para servir de suporte para a relização de testes.
+Esse aplicativo foi criado para servir de suporte para a relização de testes.
 
 # Requirements
 
