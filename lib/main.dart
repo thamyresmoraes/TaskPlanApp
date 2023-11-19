@@ -24,6 +24,28 @@ class TaskPlanApp extends StatelessWidget {
   }
 }
 
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onLogout;
+
+  CustomAppBar({required this.onLogout});
+
+  @override
+  Size get preferredSize => Size.fromHeight(56.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text('Task Plan App'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: onLogout,
+        ),
+      ],
+    );
+  }
+}
+
 class LoginPage extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
@@ -266,10 +288,21 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    // Navigate to the home page after successful logout
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => TaskPlanApp()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Task Lists')),
+      appBar: CustomAppBar(
+        onLogout: () => _logout(context),
+      ),
       body: Column(
         children: [
           Padding(
@@ -397,20 +430,18 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   void _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pop(context);
+    // Navigate to the home page after successful logout
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => TaskPlanApp()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.taskListName),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () => _logout(context),
-          ),
-        ],
+      appBar: CustomAppBar(
+        onLogout: () => _logout(context),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
