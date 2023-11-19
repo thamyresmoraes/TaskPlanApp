@@ -9,7 +9,7 @@ on:
       flutter-version:
         description: 'Versão do Flutter'
         required: true
-        default: '3.16.0'  # Substitua pela versão do Flutter que você está usando
+        default: '3.16.0'
 
 jobs:
   build:
@@ -27,11 +27,11 @@ jobs:
     - name: Install Dependencies
       run: flutter pub get
 
+    - name: Build IPA
+      run: flutter build ios
+      
     - name: Build APK
       run: flutter build apk
-
-    - name: Build IPA
-      run: flutter build ios --release --no-codesign
 
     - name: Archive Artifacts
       uses: actions/upload-artifact@v2
