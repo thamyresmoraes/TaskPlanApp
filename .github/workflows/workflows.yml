@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      flutter-version:
+        description: 'Versão do Flutter'
+        required: true
+        default: '3.16.0'  # Substitua pela versão do Flutter que você está usando
 
 jobs:
   build:
@@ -16,7 +22,7 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.16.0' # Substitua pela versão do Flutter que você está usando
+        flutter-version: ${{ github.event.inputs.flutter-version }}
 
     - name: Install Dependencies
       run: flutter pub get
@@ -59,10 +65,11 @@ jobs:
     - name: Deploy to Release Page
       uses: softprops/action-gh-release@v1
       with:
-        files:
-          - build/app/outputs/flutter-apk/app-release.apk
-          - build/ios/Runner.app
+        files: |
+          build/app/outputs/flutter-apk/app-release.apk
+          build/ios/Runner.app
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
