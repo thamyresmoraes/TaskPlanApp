@@ -1,4 +1,4 @@
-name: Build and Deploy Android to Firebase
+name: Build and Deploy to Firebase
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.4'  # Substitua pela versão do Flutter desejada
+          flutter-version: '3.10.5' 
 
       - name: Install dependencies
         run: flutter pub get
@@ -43,5 +43,3 @@ jobs:
           echo ${{ secrets.FIREBASE_SERVICE_ACCOUNT }} | base64 --decode > $HOME/service-account.json
           export FIREBASE_TOKEN="${{ secrets.FIREBASE_TOKEN }}"
           firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app taskPlanApp --token $FIREBASE_TOKEN --service-account $HOME/service-account.json
-
-
