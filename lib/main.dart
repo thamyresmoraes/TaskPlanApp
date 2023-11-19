@@ -242,7 +242,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.user.uid)
-        .set({
+        .update({
       'taskLists': _taskLists,
     });
   }
@@ -362,9 +362,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.user.uid)
-        .set({
+        .update({
       'taskLists_${widget.taskListName}': _tasks,
-    }, SetOptions(merge: true));
+    });
   }
 
   void _createTask() {
