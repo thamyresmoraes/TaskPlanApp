@@ -15,9 +15,9 @@ class TaskPlanApp extends StatelessWidget {
     return MaterialApp(
       title: 'Task Plan App',
       theme: ThemeData(
-        primaryColor: Colors.white,
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: Color(0xFF79BF83)),
+        primaryColor: Color.fromARGB(255, 252, 254, 254),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: Color.fromARGB(255, 248, 249, 248)),
       ),
       home: LoginPage(),
     );
@@ -93,7 +93,7 @@ class LoginPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Image.asset('assets/check_icon.png', width: 100, height: 100),
+            Image.asset('lib/assets/check_icon.png', width: 100, height: 100),
             TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
