@@ -68,6 +68,7 @@ jobs:
 
     - name: Check Existing Tag
       run: |
+        cd $GITHUB_WORKSPACE
         if [[ -z "$(git tag -l 'v${{ steps.set_version.outputs.version }}')" ]]; then
           git tag -a "v${{ steps.set_version.outputs.version }}" -m "Release version v${{ steps.set_version.outputs.version }}"
           git push origin "v${{ steps.set_version.outputs.version }}"
