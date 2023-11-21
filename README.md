@@ -35,4 +35,8 @@ Esse aplicativo foi criado para servir de suporte para a relização de testes.
 ![criandoLista](https://github.com/thamyresmoraes/TaskPlanApp/assets/23202661/80d09c98-7a6e-4b93-9247-2000be9892d2)
 
 
+
+
+[click me to download - APK](https://github.com/thamyresmoraes/TaskPlanApp/suites/18358739727/artifacts/1062789094)
+
  
