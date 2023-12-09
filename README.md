@@ -1,42 +1,66 @@
+
 # Task Plan App
 
-Esse aplicativo foi criado para servir de suporte para a relização de testes.
+## Descrição
 
-# Requirements
+O Task Plan App é um aplicativo para gerenciar listas de tarefas. O usuário pode criar listas de tarefas, adicionar e remover tarefas, e marcar tarefas como concluídas.
 
-- Flutter 3.16
-- Dart  3.2.0
-- Emulador Android ou iOs
+## Requisitos
 
-# Setup
+- Flutter 2.10.4
+- Dart 2.16.1
 
+## Instalação
 
-1 -  Clone este repositório na sua máquina;
+```
+git clone https://github.com/[seu_nome]/task_plan_app.git
+cd task_plan_app
+flutter pub get
+flutter run
+```
 
-2 -  Navegue até a pasta TaskPlanApp;
-
-3 - Instale as dependencias executando o comando `flutter pub get`
-
-4 - Com o emulador aberto, execute o comando `flutter run`
-
-
-# O que tem nesse app? 
-
-#### 1 - Cadastro e autenticação de usuários: 
-
-![cadastroApp](https://github.com/thamyresmoraes/TaskPlanApp/assets/23202661/a570d5be-3de7-4a30-b14c-4ee2d405c760)
-![autenticaçaoapp](https://github.com/thamyresmoraes/TaskPlanApp/assets/23202661/0fc4e449-4e7a-4582-a8f5-7e71b70dc16d)
+## Uso
 
 
-#### 2 -  Cria lista de tarefas e tarefas
-#### 3 - Quando concluídas você pode marcar a tarefa como concluída 
-#### 4 - Pode excluir tarefas 
+- Após executar o aplicativo, você será direcionado para a tela de login. Se você não tiver uma conta, clique em "Registrar" para criar uma.
 
-![criandoLista](https://github.com/thamyresmoraes/TaskPlanApp/assets/23202661/80d09c98-7a6e-4b93-9247-2000be9892d2)
+- Após fazer login, você será direcionado para a tela inicial do aplicativo. Nesta tela, você pode visualizar suas listas de tarefas.
 
+- Para criar uma nova lista de tarefas, clique no botão "+" no canto superior direito da tela.
 
+- Para adicionar uma tarefa a uma lista de tarefas, clique na lista de tarefas e, em seguida, clique no botão "+" no canto superior direito da tela.
 
+- Para marcar uma tarefa como concluída, clique na tarefa e, em seguida, clique no botão "Concluída".
 
-[click me to download - APK](https://github.com/thamyresmoraes/TaskPlanApp/suites/18358739727/artifacts/1062789094)
+## Testes
 
- 
+Para executar os testes unitários e widget do aplicativo, use o seguinte comando:
+
+```
+flutter test
+
+```
+
+Para gerar a taxa de cobertura do aplicativo, use o seguinte comando:
+
+```
+flutter test --coverage
+```
+
+### Contribuições
+
+Contribuições são bem-vindas. Para contribuir com o projeto, siga estas etapas:
+
+Faça um fork do projeto no GitHub.
+Crie uma nova branch para sua contribuição.
+Faça as alterações necessárias.
+Execute os testes para garantir que suas alterações não quebrem o código existente.
+Crie uma pull request para enviar suas alterações para o projeto principal.
+
+### Licença
+
+O Task Plan App é licenciado sob a licença MIT.
+
+Copyright
+
+Copyright (c) 2023 [ThamyresMoraes]
