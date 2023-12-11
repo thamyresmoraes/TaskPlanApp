@@ -25,7 +25,8 @@ class LoginController {
             model: TaskListModel(userCredential.user!),
             listNameController: TextEditingController(),
             createTaskList: () {}, 
-            deleteTaskList: (int index) {}, // Adicione a lógica necessária aqui
+            deleteTaskList: (int index) {},
+            logout: () {},
           ),
         ),
       );

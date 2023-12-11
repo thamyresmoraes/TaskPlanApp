@@ -17,6 +17,7 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   late TaskListModel _model;
   late TaskListController _controller;
+  late TaskListView _view;
 
   @override
   void initState() {
@@ -26,7 +27,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       model: _model,
       listNameController: TextEditingController(),
       createTaskList: () => _controller.createTaskList(),
-      deleteTaskList: (index) => _controller.deleteTaskList(index),
+      deleteTaskList: (index) => _controller.deleteTaskList(index), 
+      logout: () => _view.logout(context),
     ));
 
     _controller.init();

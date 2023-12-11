@@ -1,6 +1,5 @@
-// task_list_view.dart
-
 import 'package:flutter/material.dart';
+
 import '../models/task_list_model.dart';
 
 class TaskListView extends StatelessWidget {
@@ -8,14 +7,17 @@ class TaskListView extends StatelessWidget {
   final TextEditingController listNameController;
   final Function createTaskList;
   final Function(int) deleteTaskList;
+  final Function logout;
 
   TaskListView({
     required this.model,
     required this.listNameController,
     required this.createTaskList,
     required this.deleteTaskList,
+    required this.logout,
   });
 
+  // Adicione este método para limpar o campo do nome da lista
   void clearListName() {
     listNameController.clear();
   }
@@ -23,7 +25,7 @@ class TaskListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Task List App')),
+      appBar: AppBar(title: Text('Task List App'),),
       body: Column(
         children: [
           Padding(
@@ -66,6 +68,4 @@ class TaskListView extends StatelessWidget {
       ),
     );
   }
-
-  
 }
