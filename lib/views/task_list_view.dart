@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:taskPlanApp/main.dart';
 
 import '../models/task_list_model.dart';
 
@@ -25,7 +27,23 @@ class TaskListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Task List App'),),
+      appBar: AppBar(
+        title: Text('Task List App'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Chame a função de logout passada como parâmetro
+              logout();
+              // Navegue de volta para a tela de login
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => TaskPlanApp()),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
