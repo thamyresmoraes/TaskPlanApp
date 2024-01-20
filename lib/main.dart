@@ -134,6 +134,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _selectedGender = 'Female'; // Set an initial value for the dropdown
 
+  void showAlertDialog(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _register(BuildContext context) async {
     try {
       final UserCredential userCredential =
@@ -160,40 +180,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('Senha Fraca');
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Senha fraca!'),
-                content: Text('Por favor, insira no mínimo 6 caracteres'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            });
+        showAlertDialog(
+          context,
+          'Senha fraca!',
+          'Por favor, insira no mínimo 6 caracteres',
+        );
       } else if (e.code == 'email-already-in-use') {
         print('E-mail já cadastrado');
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('Email já cadastrado'),
-                content: Text('Por favor, faça o seu login!'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            });
+        showAlertDialog(
+          context,
+          'Email já cadastrado',
+          'Por favor, faça o seu login!',
+        );
       }
     } catch (e) {
       // Registration failed, show friendly error message
