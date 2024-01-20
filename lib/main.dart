@@ -134,6 +134,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _selectedGender = 'Female'; // Set an initial value for the dropdown
 
+  void showAlertDialog(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _register(BuildContext context) async {
     try {
       final UserCredential userCredential =
@@ -157,6 +177,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
         MaterialPageRoute(
             builder: (context) => TaskListScreen(userCredential.user!)),
       );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('Senha Fraca');
+        showAlertDialog(
+          context,
+          'Senha fraca!',
+          'Por favor, insira no mínimo 6 caracteres',
+        );
+      } else if (e.code == 'email-already-in-use') {
+        print('E-mail já cadastrado');
+        showAlertDialog(
+          context,
+          'Email já cadastrado',
+          'Por favor, faça o seu login!',
+        );
+      }
     } catch (e) {
       // Registration failed, show friendly error message
       showDialog(
