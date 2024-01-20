@@ -157,6 +157,44 @@ class _RegistrationPageState extends State<RegistrationPage> {
         MaterialPageRoute(
             builder: (context) => TaskListScreen(userCredential.user!)),
       );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('Senha Fraca');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Senha fraca!'),
+                content: Text('Por favor, insira no mínimo 6 caracteres'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            });
+      } else if (e.code == 'email-already-in-use') {
+        print('E-mail já cadastrado');
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Email já cadastrado'),
+                content: Text('Por favor, faça o seu login!'),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            });
+      }
     } catch (e) {
       // Registration failed, show friendly error message
       showDialog(
