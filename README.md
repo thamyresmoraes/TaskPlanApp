@@ -40,3 +40,6 @@ Esse aplicativo foi criado para servir de suporte para a relização de testes.
 [click me to download - APK](https://github.com/thamyresmoraes/TaskPlanApp/suites/18358739727/artifacts/1062789094)
 
  
+
+
+ 
